@@ -1,2 +1,2 @@
-# fenixreborn-framework
-Repositório de transição da Fenix Reborn com a utilização de uma framework.
+# sicapo-mobile
+Repositório de transição da Sicapo Master da aplicação web para aplicativo.
