@@ -18,7 +18,23 @@ export default function HomeScreen({ navigation }) {
       >
         <Text style={styles.cardTitle}>Pedidos Realizados</Text>
       </TouchableOpacity>
+      
+      <TouchableOpacity 
+        onPress={() => navigation.navigate('AdicionarClientes')} 
+        style={styles.card}
+      >
+        <Text style={styles.cardTitle}>Adicionar Clientes</Text>
+      </TouchableOpacity>
+      
+      <TouchableOpacity 
+        onPress={() => navigation.navigate('ListaClientes')} 
+        style={styles.card}
+      >
+        <Text style={styles.cardTitle}>Clientes</Text>
+      </TouchableOpacity>
     </View>
+    
+    
   );
 }
 
