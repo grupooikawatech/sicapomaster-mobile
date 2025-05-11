@@ -1,8 +1,29 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import SQLite from 'react-native-sqlite-storage';
 
 export default function HomeScreen({ navigation }) {
+  // const [mensagem, setMensagem] = useState('Conectando ao banco...');
+
+  // useEffect(() => {
+  //   const db = SQLite.openDatabase(
+  //     {
+  //       name: 'webapp.db',
+  //       location: 'default',
+  //     },
+  //     () => {
+  //       setMensagem('✅ Banco de dados conectado!');
+  //     },
+  //     error => {
+  //       setMensagem(`❌ Erro ao conectar: ${error.message}`);
+  //     }
+  //   );
+  // }, []);
+
   return (
     <View style={styles.container}>
+      {/* <Text style={styles.texto}>{mensagem}</Text> */}
+
       <Text style={styles.header}>Sicapo Master</Text>
 
       <TouchableOpacity
@@ -88,4 +109,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  // texto: {
+  //   fontSize: 18,
+  //   textAlign: 'center',
+  //   marginHorizontal: 20,
+  // },
 });

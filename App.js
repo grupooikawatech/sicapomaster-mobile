@@ -4,12 +4,37 @@ import HomeScreen from './src/screens/HomeScreen';
 import PedidosScreen from './src/screens/pedidosScreen';
 import PedidosRealizados from './src/screens/pedidosRealizados';
 import ListaClientes from './src/screens/listaClientes';
-import AdicionarClientes from '/home/pc/projetos/sicapomaster-mobile/src/screens/adicionarClientes'
+import AdicionarClientes from './src/screens/adicionarClientes';
 import ProdutosScreen from './src/screens/produtosScreen';
+import React, { useEffect } from 'react';
+import { Alert, View, Text, StyleSheet } from 'react-native';
+import SQLite from 'react-native-sqlite-storage';
 
 const Stack = createNativeStackNavigator();
 
+SQLite.enablePromise(true); // Recomendado para usar com async/await
+
 export default function App() {
+  useEffect(() => {
+    const conectarBanco = async () => {
+      try {
+        const db = await SQLite.openDatabase({
+          name: 'webapp.db',
+          location: 'default',
+          createFromLocation: 1, // <- isso importa o banco já existente
+        });
+
+        // Teste simples
+        await db.executeSql('SELECT 1');
+
+        Alert.alert('Sucesso', 'Banco de dados carregado com sucesso!');
+      } catch (error) {
+        Alert.alert('Erro', 'Falha ao abrir o banco: ' + error.message);
+      }
+    };
+
+    conectarBanco();
+  }, []);
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -31,7 +56,7 @@ export default function App() {
         <Stack.Screen 
           name="AdicionarClientes"
           component={AdicionarClientes} 
-          options={{ title: 'AdicionarClientes' }} 
+          options={{ title: 'Adicionar Clientes' }} 
         />
         <Stack.Screen 
           name="ListaClientes"
