@@ -1,40 +1,63 @@
+
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Unable to resolve "@react-navigation/native"']); 
+import React, { useEffect } from 'react';
+import { Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import * as SQLite from 'expo-sqlite';
 import HomeScreen from './src/screens/HomeScreen';
 import PedidosScreen from './src/screens/pedidosScreen';
 import PedidosRealizados from './src/screens/pedidosRealizados';
 import ListaClientes from './src/screens/listaClientes';
 import AdicionarClientes from './src/screens/adicionarClientes';
 import ProdutosScreen from './src/screens/produtosScreen';
-import React, { useEffect } from 'react';
-import { Alert, View, Text, StyleSheet } from 'react-native';
-import SQLite from 'react-native-sqlite-storage';
 
 const Stack = createNativeStackNavigator();
 
-SQLite.enablePromise(true); // Recomendado para usar com async/await
-
 export default function App() {
   useEffect(() => {
-    const conectarBanco = async () => {
+    const loadDatabase = async () => {
       try {
-        const db = await SQLite.openDatabase({
-          name: 'webapp.db',
-          location: 'default',
-          createFromLocation: 1, // <- isso importa o banco já existente
+        const localDb = SQLite.openDatabaseSync('webapp.db');
+        
+        // Verifica se o banco já existe
+        const dbFileInfo = await FileSystem.getInfoAsync(
+          `${FileSystem.documentDirectory}SQLite/webapp.db`
+        );
+
+        if (!dbFileInfo.exists) {
+          // Carrega o arquivo do bundle
+          const asset = asset.fromModule(require('./assets/webapp.db'));
+          await asset.downloadAsync();
+
+          // Copia para o diretório SQLite
+          await FileSystem.makeDirectoryAsync(
+            `${FileSystem.documentDirectory}SQLite`,
+            { intermediates: true }
+          );
+          
+          await FileSystem.copyAsync({
+            from: asset.localUri,
+            to: `${FileSystem.documentDirectory}SQLite/webapp.db`,
+          });
+        }
+
+        // Testa a conexão
+        await db.transaction(tx => {
+          tx.executeSql('SELECT 1', [], () => {
+            Alert.alert('Sucesso', 'Banco carregado!');
+          });
         });
 
-        // Teste simples
-        await db.executeSql('SELECT 1');
-
-        Alert.alert('Sucesso', 'Banco de dados carregado com sucesso!');
       } catch (error) {
-        Alert.alert('Erro', 'Falha ao abrir o banco: ' + error.message);
+        Alert.alert('Erro', error.message);
       }
     };
 
-    conectarBanco();
+    loadDatabase();
   }, []);
+
   return (
     <NavigationContainer>
       <Stack.Navigator>

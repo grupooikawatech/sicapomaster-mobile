@@ -1,28 +1,30 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import SQLite from 'react-native-sqlite-storage';
+import * as SQLite from 'expo-sqlite';
+
+// Abra o banco de dados corretamente
+const db = SQLite.openDatabaseAsync('webapp.db');
 
 export default function HomeScreen({ navigation }) {
-  // const [mensagem, setMensagem] = useState('Conectando ao banco...');
+  const [mensagem, setMensagem] = useState('Conectando ao banco...');
 
-  // useEffect(() => {
-  //   const db = SQLite.openDatabase(
-  //     {
-  //       name: 'webapp.db',
-  //       location: 'default',
-  //     },
-  //     () => {
-  //       setMensagem('✅ Banco de dados conectado!');
-  //     },
-  //     error => {
-  //       setMensagem(`❌ Erro ao conectar: ${error.message}`);
-  //     }
-  //   );
-  // }, []);
+  useEffect(() => {
+    const testarConexao = async () => {
+      try {
+        // Execute uma query simples para testar
+        await db.execAsync([{ sql: 'SELECT name FROM sqlite_master WHERE type="table"', args: [] }]);
+        setMensagem('✅ Banco conectado!');
+      } catch (error) {
+        setMensagem(`❌ Erro: ${error.message}`);
+      }
+    };
+
+    testarConexao();
+  }, []);
 
   return (
     <View style={styles.container}>
-      {/* <Text style={styles.texto}>{mensagem}</Text> */}
+      { <Text style={styles.texto}>{mensagem}</Text> }
 
       <Text style={styles.header}>Sicapo Master</Text>
 
@@ -109,9 +111,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  // texto: {
-  //   fontSize: 18,
-  //   textAlign: 'center',
-  //   marginHorizontal: 20,
-  // },
+   texto: {
+     fontSize: 18,
+     textAlign: 'center',
+     marginHorizontal: 20,
+   },
 });

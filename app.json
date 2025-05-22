@@ -12,6 +12,26 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "assetBundlePatterns": [
+      "**/*.db",
+      "assets/*"
+    ],
+    "plugins": [
+      [
+        "expo-sqlite",
+        {
+          "androidDatabaseLocation": "default",
+          "iosDatabaseLocation": "Library/Caches"
+        }
+      ],
+      [
+        "expo-file-system",
+        {
+          "iosAccessesContactNotes": true 
+        }
+      ]
+    ],
+
     "ios": {
       "supportsTablet": true
     },
@@ -19,7 +39,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.anonymous.sicapomastermobile"
     },
     "web": {
       "favicon": "./assets/favicon.png"
